@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Corisca Management UI</title>
+        <link type="stylesheet" href="css/main.css" />
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    <body>
+        <h1>Corsica Management UI</h1>
+        <!-- Contains all options surrounding the host the UI is using -->
+        <h3>Host:</h3>
+        <button onclick="setHost(prompt('Enter host...', host));">Set Host</button>
+        <h4 class="host">http://corsica.mozilla.io/</h4>
+        <!-- Contains all options for choosing the client the UI is using -->
+        <h3>Clients:</h3>
+        <button onclick="displayClients();">Refresh</button>
+        <select class="clients"></select>
+        <!-- Contains all options that the UI may issue to the client -->
+        <h3>Client Controls:</h3>
+        <!-- Completely reload the browser's instance for this client -->
+        <button onclick="issueCommand('admin type=reload screen='+$('.clients').val());">Reload</button>
+        <!-- Reset the client's connection with the server (usually just fetches new content) -->
+        <button onclick="issueCommand('reset screen='+$('.clients').val());">Reset</button>
+        <!-- Rename the current client -->
+        <button onclick="issueCommand('admin type=rename name='+prompt('Enter new name:')+' screen='+$('.clients').val());">Rename</button>
+        <!-- Contains all options relating to content control for the current client -->
+        <h3>Content:</h3>
+        <!-- Subscribe the current client to a tag -->
+        <button onclick="issueCommand('admin type=subscribe tag='+prompt('Enter tag name:')+' screen='+$('.clients').val());">Subscribe</button>
+        <!-- Unsubscribe the current client to a tag -->
+        <button onclick="issueCommand('admin type=unsubscribe tag='+prompt('Enter tag name:')+' screen='+$('.clients').val());">Unsubscribe</button>
+        <!-- Send a webpage to the client to be displayed -->
+        <button onclick="issueCommand('content type=url url='+prompt('Enter website:')+' screen='+$('.clients').val());">Website</button>
+    </body>
+</html>
