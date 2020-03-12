@@ -1,5 +1,6 @@
-// Set the default host as Mozilla's own Corsica server
-var host = "http://corsica.mozilla.io/";
+// Set the default host as my test instance until Mozilla updates their instance with the PR ~~Mozilla's own Corsica server~~
+// var host = "https://corsica.mozilla.io/";
+var host = "https://tomfairey-corsica.herokuapp.com/";
 
 // Allow changing of the host and updating of the UI after host change
 function setHost(newHost) {
@@ -42,6 +43,51 @@ function parseCensus(data) {
     data.clients.forEach(function(data) {
         $(".clients").append("<option>"+data+"</option>");
     });
+}
+
+// Get all subscriptions of the clients
+function getSubscriptions(callback, screen) {
+    $.ajax({
+        type: "POST",
+        url: host+"api/tags.getSubscriptions",
+        contentType: "application/json",
+        success: function(data) {
+            callback(data, screen);
+        },
+        dataType: "JSON"
+    });
+}
+
+// Get all available tags (~~Pending~~ Approved PR on mozilla/corsica from tomfairey/corsica)
+function getTags(callback) {
+    $.ajax({
+        type: "POST",
+        url: host+"api/tags.getAll",
+        contentType: "application/json",
+        success: function(data) {
+            callback(data);
+        },
+        dataType: "JSON"
+    });
+}
+
+// Parse all tags on the selected client so the user may subscribe clients to available tags
+function parseSubscribeTags(data) {
+    $(".subscribeTags").html("");
+    data.tags.forEach(function(data) {
+        if(Object.keys(data).length > 0 && data.constructor === Object) {
+            $(".subscribeTags").append("<option>"+data.name+"</option>");
+        }
+    })
+}
+
+// Parse all tags currently subscribed to by the selected client so the user may unsubscribe the client from said tag
+function parseUnsubscribeTags(data, screen) {
+    $(".unsubscribeTags").html("");
+    console.log("data.subscriptions[screen]", data.subscriptions[screen]);
+    data.subscriptions[screen].forEach(function(data) {
+        $(".unsubscribeTags").append("<option>"+data+"</option>");
+    })
 }
 
 // A single function to fetch and parse clients

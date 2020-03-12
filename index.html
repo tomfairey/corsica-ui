@@ -11,7 +11,7 @@
         <!-- Contains all options surrounding the host the UI is using -->
         <h3>Host:</h3>
         <button onclick="setHost(prompt('Enter host...', host));">Set Host</button>
-        <h4 class="host">http://corsica.mozilla.io/</h4>
+        <h4 class="host">https://tomfairey-corsica.herokuapp.com/</h4>
         <!-- Contains all options for choosing the client the UI is using -->
         <h3>Clients:</h3>
         <button onclick="displayClients();">Refresh</button>
@@ -25,11 +25,20 @@
         <!-- Rename the current client -->
         <button onclick="issueCommand('admin type=rename name='+prompt('Enter new name:')+' screen='+$('.clients').val());">Rename</button>
         <!-- Contains all options relating to content control for the current client -->
-        <h3>Content:</h3>
+        <h3>Tags:</h3>
+        <button onclick="getTags(parseSubscribeTags);">Refresh</button>
+        <select class="subscribeTags"></select>
+        <br />
         <!-- Subscribe the current client to a tag -->
-        <button onclick="issueCommand('admin type=subscribe tag='+prompt('Enter tag name:')+' screen='+$('.clients').val());">Subscribe</button>
+        <button onclick="issueCommand('admin type=subscribe tag='+$('.subscribeTags').val()+' screen='+$('.clients').val());">Subscribe</button>
+        <br />
+        <br />
+        <button onclick="getSubscriptions(parseUnsubscribeTags, $('.clients').val());">Refresh</button>
+        <select class="unsubscribeTags"></select>
+        <br />
         <!-- Unsubscribe the current client to a tag -->
-        <button onclick="issueCommand('admin type=unsubscribe tag='+prompt('Enter tag name:')+' screen='+$('.clients').val());">Unsubscribe</button>
+        <button onclick="issueCommand('admin type=unsubscribe tag='+$('.unsubscribeTags').val()+' screen='+$('.clients').val());">Unsubscribe</button>
+        <h3>Content:</h3>
         <!-- Send a webpage to the client to be displayed -->
         <button onclick="issueCommand('content type=url url='+prompt('Enter website:')+' screen='+$('.clients').val());">Website</button>
     </body>
