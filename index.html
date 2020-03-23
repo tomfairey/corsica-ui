@@ -26,6 +26,7 @@
         <button onclick="issueCommand('admin type=rename name='+prompt('Enter new name:')+' screen='+$('.clients').val());">Rename</button>
         <!-- Contains all options relating to content control for the current client -->
         <h3>Tags:</h3>
+        <!-- Refresh the list of tags available to subscribe to -->
         <button onclick="getTags(parseSubscribeTags);">Refresh</button>
         <!-- Subscribe the current client to a tag -->
         <button onclick="issueCommand('admin type=subscribe tag='+$('.subscribeTags').val()+' screen='+$('.clients').val());">Subscribe</button>
@@ -37,11 +38,12 @@
         <textarea class="subscribeTagContent" cols="150" rows="10"></textarea>
         <br />
         <br />
-        <!-- Display the tags available to ubsubscribe a screen from -->
+        <!-- Refresh the list of tags available to unsubscribe from -->
         <button onclick="getSubscriptions(parseUnsubscribeTags, $('.clients').val());">Refresh</button>
         <!-- Unsubscribe the current client to a tag -->
         <button onclick="issueCommand('admin type=unsubscribe tag='+$('.unsubscribeTags').val()+' screen='+$('.clients').val());">Unsubscribe</button>
         <br />
+        <!-- Display the tags available to unsubscribe a screen from -->
         <select class="unsubscribeTags"></select>
         <br />
         <h3>Content:</h3>
