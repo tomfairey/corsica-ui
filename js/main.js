@@ -71,6 +71,23 @@ function getTags(callback) {
     });
 }
 
+// Get the content of a specific tag to display to the user on selection of said tag
+function getTagContent(callback, tagName){
+    $.ajax({
+        type: "POST",
+        url: host+"api/tags.getAll",
+        contentType: "application/json",
+        success: function(data) {
+            data.tags.forEach(function(tag) {
+                if(tag.name === tagName) {
+                    callback(tag);
+                };
+            });
+        },
+        dataType: "JSON"
+    });
+}
+
 // Parse all tags on the selected client so the user may subscribe clients to available tags
 function parseSubscribeTags(data) {
     $(".subscribeTags").html("");
@@ -78,7 +95,8 @@ function parseSubscribeTags(data) {
         if(Object.keys(data).length > 0 && data.constructor === Object) {
             $(".subscribeTags").append("<option>"+data.name+"</option>");
         }
-    })
+    });
+    getTagContent(parseTagContent, $(".subscribeTags").val());
 }
 
 // Parse all tags currently subscribed to by the selected client so the user may unsubscribe the client from said tag
@@ -88,6 +106,20 @@ function parseUnsubscribeTags(data, screen) {
     data.subscriptions[screen].forEach(function(data) {
         $(".unsubscribeTags").append("<option>"+data+"</option>");
     })
+}
+
+// Parse the content a specific tag holds, remove XSS possibility and append the string to the 'textarea' element
+function parseTagContent(data) {
+    $(".subscribeTagContent").html("");
+    console.log("data", data);
+    var lt = /</g, 
+    gt = />/g, 
+    ap = /'/g, 
+    ic = /"/g;
+    data.commands.forEach(function(command) {
+        command = command.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+        $(".subscribeTagContent").append(command + "\n\n");
+    });
 }
 
 // A single function to fetch and parse clients
