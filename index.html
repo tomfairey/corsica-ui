@@ -19,18 +19,17 @@
         <!-- Contains all options that the UI may issue to the client -->
         <h3>Client Controls:</h3>
         <!-- Completely reload the browser's instance for this client -->
-        <button onclick="issueCommand('admin type=reload screen='+$('.clients').val());">Reload</button>
+        <button onclick="reloadScreen($('.clients').val());">Reload</button>
         <!-- Reset the client's connection with the server (usually just fetches new content) -->
-        <button onclick="issueCommand('reset screen='+$('.clients').val());">Reset</button>
+        <button onclick="resetScreen($('.clients').val());">Reset</button>
         <!-- Rename the current client -->
-        <button onclick="issueCommand('admin type=rename name='+prompt('Enter new name:')+' screen='+$('.clients').val());">Rename</button>
+        <button onclick="renameScreen($('.clients').val(), prompt('Enter new name:'));">Rename</button>
         <!-- Contains all options relating to content control for the current client -->
         <h3>Tags:</h3>
         <!-- Refresh the list of tags available to subscribe to -->
         <button onclick="getTags(parseSubscribeTags);">Refresh</button>
         <!-- Subscribe the current client to a tag -->
-        <button onclick="issueCommand('admin type=subscribe tag='+$('.subscribeTags').val()+' screen='+$('.clients').val());">Subscribe</button>
-        <br />
+        <button onclick="subscribeTag($('.clients').val(), $('.subscribeTags').val());">Subscribe</button>
         <!-- Display the tags available to subscribe a screen to -->
         <select class="subscribeTags" onChange="getTagContent(parseTagContent, $(this).val());"></select>
         <br />
@@ -41,13 +40,12 @@
         <!-- Refresh the list of tags available to unsubscribe from -->
         <button onclick="getSubscriptions(parseUnsubscribeTags, $('.clients').val());">Refresh</button>
         <!-- Unsubscribe the current client to a tag -->
-        <button onclick="issueCommand('admin type=unsubscribe tag='+$('.unsubscribeTags').val()+' screen='+$('.clients').val());">Unsubscribe</button>
-        <br />
+        <button onclick="unsubscribeTag($('.clients').val(), $('.unsubscribeTags').val());">Unsubscribe</button>
         <!-- Display the tags available to unsubscribe a screen from -->
         <select class="unsubscribeTags"></select>
         <br />
         <h3>Content:</h3>
         <!-- Send a webpage to the client to be displayed -->
-        <button onclick="issueCommand('content type=url url='+prompt('Enter website:')+' screen='+$('.clients').val());">Website</button>
+        <button onclick="pushContent($('.clients').val(), 'url', prompt('Enter website:'));">Website</button>
     </body>
 </html>

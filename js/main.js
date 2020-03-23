@@ -45,17 +45,82 @@ function parseCensus(data) {
     });
 }
 
+// Reload a client (full browser tab reload)
+function reloadScreen(screen) {
+    if(screen !== null) {
+        issueCommand('admin type=reload screen='+screen);
+    } else {
+        // No screen has been passed
+        console.warn("No screen has been passed");
+    }
+}
+
+// Reset a client
+function resetScreen(screen) {
+    if(screen !== null) {
+        issueCommand('reset screen='+screen);
+    } else {
+        // No screen has been passed
+        console.warn("No screen has been passed");
+    }
+}
+
+// Rename a client
+function renameScreen(screen, name) {
+    if(screen !== null && name !== null) {
+        issueCommand('admin type=rename name='+name+' screen='+screen);
+    } else {
+        // No screen has been passed
+        console.warn("A required variable is null");
+    }
+}
+
+// Subscribe a client from a tag
+function subscribeTag(screen, tag) {
+    if(screen !== null && tag !== null) {
+        issueCommand('admin type=subscribe tag='+tag+' screen='+screen);
+    } else {
+        // No screen has been passed
+        console.warn("A required variable is null");
+    }
+}
+
+// Unsubscribe a client from a tag
+function unsubscribeTag(screen, tag) {
+    if(screen !== null && tag !== null) {
+        issueCommand('admin type=unsubscribe tag='+tag+' screen='+screen);
+    } else {
+        // No screen has been passed
+        console.warn("A required variable is null");
+    }
+}
+
+// Push content of any type to a screen
+function pushContent(screen, type, content) {
+    if(screen !== null && type !== null && content !== null) {
+        issueCommand('content type='+type+' '+type+'='+content+' screen='+screen);
+    } else {
+        // No screen has been passed
+        console.warn("A required variable is null");
+    }
+}
+
 // Get all subscriptions of the clients
 function getSubscriptions(callback, screen) {
-    $.ajax({
-        type: "POST",
-        url: host+"api/tags.getSubscriptions",
-        contentType: "application/json",
-        success: function(data) {
-            callback(data, screen);
-        },
-        dataType: "JSON"
-    });
+    if(screen !== null) {
+        $.ajax({
+            type: "POST",
+            url: host+"api/tags.getSubscriptions",
+            contentType: "application/json",
+            success: function(data) {
+                callback(data, screen);
+            },
+            dataType: "JSON"
+        });
+    } else {
+        // No screen has been passed
+        console.warn("No screen has been passed");
+    }
 }
 
 // Get all available tags (~~Pending~~ Approved PR on mozilla/corsica from tomfairey/corsica)
@@ -102,7 +167,6 @@ function parseSubscribeTags(data) {
 // Parse all tags currently subscribed to by the selected client so the user may unsubscribe the client from said tag
 function parseUnsubscribeTags(data, screen) {
     $(".unsubscribeTags").html("");
-    console.log("data.subscriptions[screen]", data.subscriptions[screen]);
     data.subscriptions[screen].forEach(function(data) {
         $(".unsubscribeTags").append("<option>"+data+"</option>");
     })
@@ -111,7 +175,6 @@ function parseUnsubscribeTags(data, screen) {
 // Parse the content a specific tag holds, remove XSS possibility and append the string to the 'textarea' element
 function parseTagContent(data) {
     $(".subscribeTagContent").html("");
-    console.log("data", data);
     var lt = /</g, 
     gt = />/g, 
     ap = /'/g, 
